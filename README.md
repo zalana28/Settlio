@@ -218,6 +218,9 @@ npx prisma studio   # Visual database browser
 | 6 | PDF receipts / invoice export | Planned |
 | 7 | Compliance / business onboarding | Planned |
 | 8 | Multi-currency, cross-chain (CCTP) | Planned |
+| 9 | Treasury dashboard | In progress |
+| 10 | Stablecoin conversion via Tower Exchange / Arc-native DEX aggregators | Planned |
+| 11 | Future off-ramp integrations | Planned |
 
 ---
 
