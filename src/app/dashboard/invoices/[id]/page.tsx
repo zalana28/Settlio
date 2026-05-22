@@ -394,7 +394,7 @@ export default function InvoiceDetailPage({
                 <div className="mb-3">
                   <div className="mb-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                     <p className="text-xs text-amber-800 font-medium">
-                      Demo mode: no wallet transaction will be sent. This uses mock settlement for demonstration only.
+                      This is a testnet MVP. Real wallet settlement uses Arc Testnet, not mainnet funds. Mock settlement is local/demo-only when explicitly enabled.
                     </p>
                   </div>
                   <button
@@ -411,7 +411,7 @@ export default function InvoiceDetailPage({
             <div>
               <div className="mb-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                 <p className="text-xs text-amber-800 font-medium">
-                  Demo mode: no wallet transaction will be sent. This uses mock settlement for demonstration only.
+                  This is a testnet MVP. Real wallet settlement uses Arc Testnet, not mainnet funds. Mock settlement is local/demo-only when explicitly enabled.
                 </p>
               </div>
               <button
