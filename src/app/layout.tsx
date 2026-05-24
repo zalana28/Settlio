@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Settlio — B2B Invoice Settlement with USDC on Arc",
-  description: "Settle B2B invoices with USDC on Arc Testnet. Connected-wallet payments, on-chain receipts, and verifiable settlement.",
+  description: "Settle B2B invoices with USDC on Arc Testnet using connected wallets and verifiable settlement receipts.",
 };
 
 export default function RootLayout({

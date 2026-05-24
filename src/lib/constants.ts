@@ -1,7 +1,7 @@
 export const SETTLEMENT_FEE_PERCENT = 0.5;
 export const DEFAULT_CURRENCY = "USDC";
 export const DEFAULT_CHAIN = "arc_testnet";
-export const APP_NAME = "ArcSettle";
+export const APP_NAME = "Settlio";
 
 export const INVOICE_STATUS_LABELS: Record<string, string> = {
   draft: "Draft",
