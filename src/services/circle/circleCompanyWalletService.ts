@@ -15,7 +15,7 @@ import { getCircleDeveloperWalletsClient, isCircleSdkConfigured } from "./circle
 import { randomUUID } from "crypto";
 
 /**
- * Default blockchain for ArcSettle company wallets.
+ * Default blockchain for Settlio company wallets.
  * ARC-TESTNET corresponds to Arc Testnet (chain ID 5042002).
  */
 const DEFAULT_CIRCLE_BLOCKCHAIN = "ARC-TESTNET";
@@ -92,7 +92,7 @@ export async function createCompanyCircleWallet(
     // Step 1: Create wallet set for the company
     const walletSetResponse = await client.createWalletSet({
       idempotencyKey: randomUUID(),
-      name: `ArcSettle - ${company.name}`,
+      name: `Settlio - ${company.name}`,
     });
 
     const walletSet = walletSetResponse.data?.walletSet;
