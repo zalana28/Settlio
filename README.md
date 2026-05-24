@@ -1,14 +1,24 @@
 # Settlio — B2B Invoice Settlement with USDC on Arc Testnet
 
-Settlio is a demo-ready B2B invoice settlement MVP using USDC on Arc Testnet. It supports invoice creation, buyer approval, connected-wallet settlement, settlement receipts, and Circle-powered developer wallet scaffolding.
-
 > **Note:** This project was originally developed under the ArcSettle repository name. The public product name is **Settlio**.
+
+---
+
+## Overview
+
+Settlio is a testnet MVP for B2B invoice settlement using USDC on Arc Testnet. It supports invoice creation, buyer approval, connected-wallet payment, on-chain receipt verification, company wallet settings, same-wallet safety guards, and a Treasury & Convert roadmap.
 
 ---
 
 ## Live Demo
 
 > **Live Demo:** https://arcsettle-three.vercel.app/
+
+---
+
+## Demo Video
+
+> **Demo Video:** Coming soon
 
 ---
 
@@ -25,40 +35,42 @@ These accounts are created by `npx prisma db seed`. The login page includes quic
 
 ## Demo Flow
 
-1. **Seller logs in** — Use `seller@arcsettle.dev` / `password123`
-2. **Seller creates an invoice** — Go to Invoices > New Invoice, select the Buyer company, enter an amount
-3. **Buyer logs in** — Sign out, then use `buyer@arcsettle.dev` / `password123`
-4. **Buyer approves the invoice** — Open the pending invoice and click Approve
-5. **Buyer connects wallet** — Click "Connect Wallet" in the header, switch to Arc Testnet
-6. **Buyer saves wallet** — Go to Settings if the wallet is not already saved
-7. **Buyer pays with connected wallet** — Click "Pay with Connected Wallet" on the approved invoice
-8. **Receipt appears** — After on-chain confirmation, the settlement receipt shows transaction hash, fee, and chain info
+1. **Open the live demo** — https://arcsettle-three.vercel.app/
+2. **Log in as Seller** — Use `seller@arcsettle.dev` / `password123`
+3. **Create invoice** — Go to Invoices > New Invoice, select the Buyer company, enter an amount
+4. **Log out and log in as Buyer** — Use `buyer@arcsettle.dev` / `password123`
+5. **Approve invoice** — Open the pending invoice and click Approve
+6. **Connect wallet on Arc Testnet** — Click "Connect Wallet" in the header and switch to Arc Testnet
+7. **Pay with connected wallet** — Click "Pay with Connected Wallet" on the approved invoice
+8. **View settlement receipt and transaction details** — After on-chain confirmation, the receipt shows transaction hash, fee, and chain info
+9. **Open Treasury** — View settled value and the future conversion roadmap
 
-> **Public production** uses real wallet settlement (testnet USDC transfer on Arc Testnet).
-> **Local development** can use "Demo Mock Settlement" if `ENABLE_MOCK_SETTLEMENT=true`.
+> This is a testnet MVP. Real wallet settlement submits testnet transactions on Arc Testnet, not mainnet funds. Mock settlement is available only when explicitly enabled for local/demo testing.
 
 ---
 
-## Features
+## MVP Features
 
-- Company registration and login (JWT auth)
+- Public landing page
 - Demo accounts with quick-fill login
-- Company wallet settings with uniqueness enforcement
+- Company registration / login (JWT auth)
 - Invoice creation with buyer selection
 - Buyer approval flow
-- **Real Arc Testnet wallet settlement** (connected-wallet ERC-20 USDC transfer)
+- Wallet connect (wagmi + viem injected connector)
+- Company wallet settings with uniqueness enforcement
+- Buyer/seller same-wallet guard
+- Real wallet-signed USDC settlement on Arc Testnet
 - On-chain receipt verification (Transfer event decode + from/to/amount match)
+- Settlement receipt and transaction detail page
+- Treasury dashboard
+- Swap on Tower external link / Treasury & Convert roadmap
+- Circle developer wallet scaffolding (dev/admin)
+- Circle transaction status sync dev/admin route
 - Settlement fee calculation (0.5%)
-- Buyer/seller same-wallet self-settlement prevention
 - Dashboard with stats and invoice status tracking
-- Invoice detail page with approve/settle actions
-- Settlement receipt with chain and fee info
-- Transaction detail page
-- Demo mock settlement mode (local/dev only)
-- Circle developer-controlled wallet scaffolding (dev/admin)
-- Circle transfer preview/execution (dev/admin)
-- Circle transaction status sync
 - Prisma seed data with demo accounts
+
+---
 
 ## Tech Stack
 
@@ -71,7 +83,9 @@ These accounts are created by `npx prisma db seed`. The login page includes quic
 | Validation | Zod |
 | Auth | JWT via `jose` + `bcryptjs` |
 | Wallet | wagmi + viem (injected connector) |
-| Settlement | Real wallet-signed Arc Testnet settlement + demo mock provider + Circle SDK scaffolding |
+| Settlement | Real wallet-signed Arc Testnet USDC settlement + local/demo mock provider + Circle SDK scaffolding |
+
+---
 
 ## Architecture
 
@@ -131,13 +145,15 @@ npx prisma db seed
 npm run dev
 ```
 
-## Settlement Modes
+---
 
-| Mode | When | How it works |
-|------|------|-------------|
-| **Real wallet settlement** | Buyer wallet connected + matches saved address + different from seller | ERC-20 USDC transfer on Arc Testnet, verified on-chain |
-| **Demo mock settlement** | `ENABLE_MOCK_SETTLEMENT=true` (local/dev) | Simulates settlement with 1s delay and fake tx hash |
-| **Circle transfer** | `CIRCLE_DEV_TOOLS_ENABLED=true` (dev/admin) | Creates Circle developer-controlled wallet transfer |
+## Current Settlement Mode
+
+| Mode | Status | Notes |
+|------|--------|-------|
+| **Real wallet settlement** | Active public user flow on Arc Testnet | Buyer pays with their connected wallet; backend verifies the on-chain receipt before marking the invoice as settled |
+| **Mock settlement** | Local/demo only, disabled in production by default | Available only when `ENABLE_MOCK_SETTLEMENT="true"` for local/demo testing |
+| **Circle settlement** | Dev/admin scaffold with transfer preview/execution and status sync | Not public production payment yet |
 
 ### Real Wallet Settlement
 
@@ -151,7 +167,7 @@ No feature flag is required. The button appears based on actual wallet safety co
 
 **Backend verification:** The `/record-settlement` endpoint fetches the transaction receipt from Arc Testnet RPC, decodes the ERC-20 Transfer event, and verifies that from/to/amount match the expected values before marking the invoice as settled.
 
-### Demo Mock Settlement (Local Only)
+### Mock Settlement (Local/Demo Only)
 
 For local development and demo purposes only. Controlled by:
 - `SETTLEMENT_PROVIDER="mock"`
@@ -212,15 +228,16 @@ npx prisma studio   # Visual database browser
 | 1 | Mock settlement MVP | Complete |
 | 1.5 | README, seed data, deployment prep | Complete |
 | 2 | Wallet connect + company wallet settings | Complete |
-| 3 | Real Arc Testnet wallet settlement + on-chain verification | Complete / demo-ready |
-| 4 | Circle Wallets / transaction status sync | Scaffolded / dev-ready |
-| 5 | Production webhook/polling automation | Planned |
-| 6 | PDF receipts / invoice export | Planned |
-| 7 | Compliance / business onboarding | Planned |
-| 8 | Multi-currency, cross-chain (CCTP) | Planned |
-| 9 | Treasury dashboard | In progress |
-| 10 | Stablecoin conversion via Tower Exchange / Arc-native DEX aggregators | Planned |
-| 11 | Future off-ramp integrations | Planned |
+| 3 | Real Arc Testnet wallet settlement + on-chain verification | Complete |
+| 4 | Treasury dashboard / Tower external link | Complete |
+| 5 | Circle Wallets / transaction status sync (dev/admin scaffold) | Complete |
+| 6 | Circle webhook/polling automation | Planned |
+| 7 | PDF receipts / invoice export | Planned |
+| 8 | Tower quote/API integration when public docs are available | Planned |
+| 9 | Paymaster / gas abstraction | Planned |
+| 10 | Pilot onboarding / traction | Planned |
+| 11 | Multi-currency, cross-chain (CCTP) | Planned |
+| 12 | Future off-ramp integrations | Planned |
 
 ---
 
@@ -234,9 +251,9 @@ npx prisma studio   # Visual database browser
 
 ### Mock Settlement
 
-- Mock settlement is disabled in production (`ENABLE_MOCK_SETTLEMENT="false"`)
+- Mock settlement is disabled in production by default (`ENABLE_MOCK_SETTLEMENT="false"`)
 - The "Demo Mock Settlement" button only appears when explicitly enabled
-- Mock settlement generates simulated transaction hashes — no real funds move
+- Mock settlement generates simulated transaction hashes for local/demo testing only
 
 ### Real Wallet Settlement
 
@@ -270,8 +287,10 @@ If any validation fails, settlement is rejected.
 
 ### Production Configuration
 
+Recommended production:
+
 ```env
-SETTLEMENT_PROVIDER="mock"
+SETTLEMENT_PROVIDER="real"
 ENABLE_MOCK_SETTLEMENT="false"
 NEXT_PUBLIC_ENABLE_MOCK_SETTLEMENT="false"
 CIRCLE_DEV_TOOLS_ENABLED="false"
@@ -281,7 +300,7 @@ CIRCLE_DEV_TOOLS_ENABLED="false"
 
 ## Disclaimer
 
-This is an MVP/testnet application. Real wallet settlement submits testnet transactions on Arc Testnet using testnet USDC. It is not production financial software and should not be used for mainnet funds.
+This is an MVP/testnet application. It is not production financial software. Real wallet settlement may submit testnet transactions on Arc Testnet. Do not use mainnet funds.
 
 ---
 
